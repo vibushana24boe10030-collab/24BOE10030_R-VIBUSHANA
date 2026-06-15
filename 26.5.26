@@ -1,0 +1,358 @@
+show dbs
+admin   40.00 KiB
+config  36.00 KiB
+local   40.00 KiB
+vit     72.00 KiB
+use vit
+already on db vit
+db.Employee.find().pretty()
+{
+  _id: ObjectId('6a1458c1f1942e3ccc54ce49'),
+  name: 'Aveek',
+  department: 'CSE'
+}
+{
+  _id: ObjectId('6a14594ef1942e3ccc54ce4a'),
+  name: 'Tamil',
+  mark: 90,
+  location: 'chennai'
+}
+db.books.insertOne({
+    title: 'MongoDB insertOne',
+    isbn: '0-7617-6154-3'
+});
+{
+  acknowledged: true,
+  insertedId: ObjectId('6a1598871542ede7ad68d880')
+}
+db.books.insertMany([
+    { title: "NoSQL Distilled", isbn: "0-4696-7030-4" },
+    { title: "NoSQL in 7 Days", isbn: "0-4086-6859-8" },
+    { title: "NoSQL Database", isbn: "0-2504-6932-4" }
+]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6a1598991542ede7ad68d881'),
+    '1': ObjectId('6a1598991542ede7ad68d882'),
+    '2': ObjectId('6a1598991542ede7ad68d883')
+  }
+}
+db.books.find()
+{
+  _id: ObjectId('6a1598871542ede7ad68d880'),
+  title: 'MongoDB insertOne',
+  isbn: '0-7617-6154-3'
+}
+{
+  _id: ObjectId('6a1598991542ede7ad68d881'),
+  title: 'NoSQL Distilled',
+  isbn: '0-4696-7030-4'
+}
+{
+  _id: ObjectId('6a1598991542ede7ad68d882'),
+  title: 'NoSQL in 7 Days',
+  isbn: '0-4086-6859-8'
+}
+{
+  _id: ObjectId('6a1598991542ede7ad68d883'),
+  title: 'NoSQL Database',
+  isbn: '0-2504-6932-4'
+}
+db.books.find().pretty()
+{
+  _id: ObjectId('6a1598871542ede7ad68d880'),
+  title: 'MongoDB insertOne',
+  isbn: '0-7617-6154-3'
+}
+{
+  _id: ObjectId('6a1598991542ede7ad68d881'),
+  title: 'NoSQL Distilled',
+  isbn: '0-4696-7030-4'
+}
+{
+  _id: ObjectId('6a1598991542ede7ad68d882'),
+  title: 'NoSQL in 7 Days',
+  isbn: '0-4086-6859-8'
+}
+{
+  _id: ObjectId('6a1598991542ede7ad68d883'),
+  title: 'NoSQL Database',
+  isbn: '0-2504-6932-4'
+}
+db.books.find({ title: "NoSQL Database" })
+{
+  _id: ObjectId('6a1598991542ede7ad68d883'),
+  title: 'NoSQL Database',
+  isbn: '0-2504-6932-4'
+}
+db.products.insertMany([
+    { "_id" : 1, "name" : "xPhone", "price" : 799, "releaseDate": ISODate("2011-05-14"), "spec" : { "ram" : 4, "screen" : 6.5, "cpu" : 2.66 },"color":["white","black"],"storage":[64,128,256]},
+    { "_id" : 2, "name" : "xTablet", "price" : 899, "releaseDate": ISODate("2011-09-01") , "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 },"color":["white","black","purple"],"storage":[128,256,512]},
+    { "_id" : 3, "name" : "SmartTablet", "price" : 899, "releaseDate": ISODate("2015-01-14"), "spec" : { "ram" : 12, "screen" : 9.7, "cpu" : 3.66 },"color":["blue"],"storage":[16,64,128]},
+    { "_id" : 4, "name" : "SmartPad", "price" : 699, "releaseDate": ISODate("2020-05-14"),"spec" : { "ram" : 8, "screen" : 9.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256,1024]},
+    { "_id" : 5, "name" : "SmartPhone", "price" : 599,"releaseDate": ISODate("2022-09-14"), "spec" : { "ram" : 4, "screen" : 5.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256]}
+ ])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': 1,
+    '1': 2,
+    '2': 3,
+    '3': 4,
+    '4': 5
+  }
+}
+db.products.insertMany([
+    { "_id" : 1, "name" : "xPhone", "price" : 799, "releaseDate": ISODate("2011-05-14"), "spec" : { "ram" : 4, "screen" : 6.5, "cpu" : 2.66 },"color":["white","black"],"storage":[64,128,256],"inventory":[{ qty: 1200,"warehouse": "San Jose"}]},
+    { "_id" : 2, "name" : "xTablet", "price" : 899, "releaseDate": ISODate("2011-09-01") , "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 },"color":["white","black","purple"],"storage":[128,256,512],"inventory":[{ qty: 300,"warehouse": "San Francisco"}]},
+    { "_id" : 3, "name" : "SmartTablet", "price" : 899, "releaseDate": ISODate("2015-01-14"), "spec" : { "ram" : 12, "screen" : 9.7, "cpu" : 3.66 },"color":["blue"],"storage":[16,64,128],"inventory":[{ qty: 400,"warehouse": "San Jose"},{ qty: 200,"warehouse": "San Francisco"}]},
+    { "_id" : 4, "name" : "SmartPad", "price" : 699, "releaseDate": ISODate("2020-05-14"),"spec" : { "ram" : 8, "screen" : 9.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256,1024],"inventory":[{ qty: 1200,"warehouse": "San Mateo"}]},
+    { "_id" : 5, "name" : "SmartPhone", "price" : 599,"releaseDate": ISODate("2022-09-14"), "spec" : { "ram" : 4, "screen" : 5.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256]}
+ ])
+MongoBulkWriteError: E11000 duplicate key error collection: vit.products index: _id_ dup key: { _id: 1 }
+db.collection.find(
+    {},
+    { "marks.1": 1, _id: 0 }
+)
+db.collection.find(
+    {},
+    { "marks.1": 1, _id: 0 }
+)
+db.products.find(
+    {},
+    {
+        _id: 0,
+        "color.1": 1
+    }
+)
+{
+  color: []
+}
+{
+  color: []
+}
+{
+  color: []
+}
+{
+  color: []
+}
+{
+  color: []
+}
+db.products.find(
+    {},
+    {
+        _id: 0,
+        "spec.cpu": 1
+    }
+)
+{
+  spec: {
+    cpu: 2.66
+  }
+}
+{
+  spec: {
+    cpu: 3.66
+  }
+}
+{
+  spec: {
+    cpu: 3.66
+  }
+}
+{
+  spec: {
+    cpu: 1.66
+  }
+}
+{
+  spec: {
+    cpu: 1.66
+  }
+}
+drop products
+SyntaxError: Missing semicolon. (1:4)
+
+> 1 | drop products
+    |     ^
+show tables
+books
+Employee
+products
+db.products.drop()
+true
+ 
+db.products.insertMany([
+    { "_id" : 1, "name" : "xPhone", "price" : 799, "releaseDate": ISODate("2011-05-14"), "spec" : { "ram" : 4, "screen" : 6.5, "cpu" : 2.66 },"color":["white","black"],"storage":[64,128,256]},
+    { "_id" : 2, "name" : "xTablet", "price" : 899, "releaseDate": ISODate("2011-09-01") , "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 },"color":["white","black","purple"],"storage":[128,256,512]},
+    { "_id" : 3, "name" : "SmartTablet", "price" : 899, "releaseDate": ISODate("2015-01-14"), "spec" : { "ram" : 12, "screen" : 9.7, "cpu" : 3.66 },"color":["blue"],"storage":[16,64,128]},
+    { "_id" : 4, "name" : "SmartPad", "price" : 699, "releaseDate": ISODate("2020-05-14"),"spec" : { "ram" : 8, "screen" : 9.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256,1024]},
+    { "_id" : 5, "name" : "SmartPhone", "price" : 599,"releaseDate": ISODate("2022-09-14"), "spec" : { "ram" : 4, "screen" : 9.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256]}
+ ])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': 1,
+    '1': 2,
+    '2': 3,
+    '3': 4,
+    '4': 5
+  }
+}
+db.products.find({
+    price: {
+        $eq: 899
+    }
+}, {
+    name: 1,
+    price: 1
+})
+{
+  _id: 2,
+  name: 'xTablet',
+  price: 899
+}
+{
+  _id: 3,
+  name: 'SmartTablet',
+  price: 899
+}
+db.products.find({
+    color: {
+        $eq: "black"
+    }
+}, {
+    name: 1,
+    color: 1
+})
+{
+  _id: 1,
+  name: 'xPhone',
+  color: [
+    'white',
+    'black'
+  ]
+}
+{
+  _id: 2,
+  name: 'xTablet',
+  color: [
+    'white',
+    'black',
+    'purple'
+  ]
+}
+db.products.find({
+    "spec.ram": 4
+
+}, {
+    name: 1,
+    "spec.ram": 1
+})
+{
+  _id: 1,
+  name: 'xPhone',
+  spec: {
+    ram: 4
+  }
+}
+{
+  _id: 5,
+  name: 'SmartPhone',
+  spec: {
+    ram: 4
+  }
+}
+db.products.find({
+    price: {
+        $lt: 799
+    }
+}, {
+    name: 1,
+    price: 1
+})
+{
+  _id: 4,
+  name: 'SmartPad',
+  price: 699
+}
+{
+  _id: 5,
+  name: 'SmartPhone',
+  price: 599
+}
+db.products.find({
+    "spec.screen": {
+        $lt: 7
+    }
+}, {
+    name: 1,
+    "spec.screen": 1
+})
+{
+  _id: 1,
+  name: 'xPhone',
+  spec: {
+    screen: 6.5
+  }
+}
+db.products.find({
+    storage: {
+        $lt: 128
+    }
+}, {
+    name: 1,
+    storage: 1
+})
+{
+  _id: 1,
+  name: 'xPhone',
+  storage: [
+    64,
+    128,
+    256
+  ]
+}
+{
+  _id: 3,
+  name: 'SmartTablet',
+  storage: [
+    16,
+    64,
+    128
+  ]
+}
+db.products.find({
+    color: {
+        $eq: "black"
+    }
+}, {
+    name: 1,
+    color: 1
+})
+{
+  _id: 1,
+  name: 'xPhone',
+  color: [
+    'white',
+    'black'
+  ]
+}
+{
+  _id: 2,
+  name: 'xTablet',
+  color: [
+    'white',
+    'black',
+    'purple'
+  ]
+}
+db.products.find({
+    "spec.ram": 4
+}, {
+    name: 1,
+    "spec.ram": 1
+})
