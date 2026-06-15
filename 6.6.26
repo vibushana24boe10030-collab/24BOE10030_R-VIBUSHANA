@@ -1,0 +1,384 @@
+use vit
+switched to db vit
+db.sales.getIndexes()
+[ { v: 2, key: { _id: 1 }, name: '_id_' } ]
+db.sales.drop()
+true
+db.sales.insertMany([
+	{ "_id" : 1, "item" : "Americanos", "price" : 5, "size": "Short", "quantity" : 22, "date" : ISODate("2022-01-15T08:00:00Z") },
+	{ "_id" : 2, "item" : "Cappuccino", "price" : 6, "size": "Short","quantity" : 12, "date" : ISODate("2022-01-16T09:00:00Z") },
+	{ "_id" : 3, "item" : "Lattes", "price" : 15, "size": "Grande","quantity" : 25, "date" : ISODate("2022-01-16T09:05:00Z") },
+	{ "_id" : 4, "item" : "Mochas", "price" : 25,"size": "Tall", "quantity" : 11, "date" : ISODate("2022-02-17T08:00:00Z") },
+	{ "_id" : 5, "item" : "Americanos", "price" : 10, "size": "Grande","quantity" : 12, "date" : ISODate("2022-02-18T21:06:00Z") },
+	{ "_id" : 6, "item" : "Cappuccino", "price" : 7, "size": "Tall","quantity" : 20, "date" : ISODate("2022-02-20T10:07:00Z") },
+	{ "_id" : 7, "item" : "Lattes", "price" : 25,"size": "Tall", "quantity" : 30, "date" : ISODate("2022-02-21T10:08:00Z") },
+	{ "_id" : 8, "item" : "Americanos", "price" : 10, "size": "Grande","quantity" : 21, "date" : ISODate("2022-02-22T14:09:00Z") },
+	{ "_id" : 9, "item" : "Cappuccino", "price" : 10, "size": "Grande","quantity" : 17, "date" : ISODate("2022-02-23T14:09:00Z") },
+	{ "_id" : 10, "item" : "Americanos", "price" : 8, "size": "Tall","quantity" : 15, "date" : ISODate("2022-02-25T14:09:00Z")}
+]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': 1,
+    '1': 2,
+    '2': 3,
+    '3': 4,
+    '4': 5,
+    '5': 6,
+    '6': 7,
+    '7': 8,
+    '8': 9,
+    '9': 10
+  }
+}
+db.sales.getIndexes()
+[ { v: 2, key: { _id: 1 }, name: '_id_' } ]
+db.sales.createIndex({item:1})
+item_1
+db.sales.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { item: 1 }, name: 'item_1' }
+]
+db.sales.find({item:"Mochas"},{item:1, size:1})
+{
+  _id: 4,
+  item: 'Mochas',
+  size: 'Tall'
+}
+db.sales.find({item:"Mochas"},{item:1, size:1}).explain("executionStats")
+{
+          isPartial: false,
+          indexVersion: 2,
+          direction: 'forward',
+          indexBounds: {
+            item: [
+              '["Mochas", "Mochas"]'
+            ]
+          },
+          keysExamined: 1,
+          seeks: 1,
+          dupsTested: 0,
+          dupsDropped: 0,
+          peakTrackedMemBytes: 0
+        }
+      }
+    }
+  },
+  queryShapeHash: 'F21846EFC1C9BCA3D61CA25D07923BBB9C1DF90BD7950B8692179466400730B5',
+  command: {
+    find: 'sales',
+    filter: {
+      item: 'Mochas'
+    },
+    projection: {
+      item: 1,
+      size: 1
+    },
+    '$db': 'vit'
+  },
+  serverInfo: {
+    host: 'Souravjyoti',
+    port: 27017,
+    version: '8.3.2',
+    gitVersion: '89f54eb32e217d2f7bfcad50e5919f3033bb9611'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted',
+    internalQueryPlannerIgnoreIndexWithCollationForRegex: 1
+  },
+  ok: 1
+}
+
+db.users.insertMany([
+   { email:  "john@test.com", name: "john"},
+   { email:  "jane@test.com", name: "jane"},
+]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6a241ed8cc38fb3fd47362d7'),
+    '1': ObjectId('6a241ed8cc38fb3fd47362d8')
+  }
+}
+db.users.createIndex({email:1},{unique:true});
+email_1
+db.users.insertOne(
+   { email:  "john@test.com", name: "johny"}
+);
+MongoServerError: E11000 duplicate key error collection: vit.users index: email_1 dup key: { email: "john@test.com" }
+db.users.drop()
+true
+db.users.insertMany([
+   { email:  "john@test.com", name: "john"},
+   { email:  "john@test.com", name: "johny"},
+   { email:  "jane@test.com", name: "jane"},
+])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6a241f0ecc38fb3fd47362da'),
+    '1': ObjectId('6a241f0ecc38fb3fd47362db'),
+    '2': ObjectId('6a241f0ecc38fb3fd47362dc')
+  }
+}
+db.users.createIndex({email: 1},{unique:true})
+MongoServerError[DuplicateKey]: Index build failed: cae06d13-ee5a-4baa-8574-0224b8525694: Collection vit.users ( 5a005c64-ba8b-444a-b02b-3f56bbe2744f ) :: caused by :: E11000 duplicate key error collection: vit.users index: email_1 dup key: { email: "john@test.com" }
+db.users.deleteOne({name:'johny', email: 'john@test.com'});
+{
+  acknowledged: true,
+  deletedCount: 1
+}
+db.users.createIndex({email: 1},{unique:true})
+email_1
+db.locations.insertOne({
+	address: "Downtown San Jose, CA, USA",
+	lat: 37.335480,
+	long: -121.893028
+})
+{
+  acknowledged: true,
+  insertedId: ObjectId('6a241f48cc38fb3fd47362dd')
+}
+db.locations.insertOne({
+	address: "Downtown San Jose, CA, USA",
+	lat: 37.335480,
+	long: -121.893028
+})
+{
+  acknowledged: true,
+  insertedId: ObjectId('6a241f57cc38fb3fd47362de')
+}
+db.locations.createIndex({
+	lat: 1,
+	long: 1
+},{ unique: true });
+MongoServerError[DuplicateKey]: Index build failed: 453bc4a3-80cc-475e-871f-863aaf6a54c0: Collection vit.locations ( b268b6f2-0509-414d-b6ec-2f0e950c3f06 ) :: caused by :: E11000 duplicate key error collection: vit.locations index: lat_1_long_1 dup key: { lat: 37.33548, long: -121.893028 }
+db.locations.find()
+{
+  _id: ObjectId('6a241f48cc38fb3fd47362dd'),
+  address: 'Downtown San Jose, CA, USA',
+  lat: 37.33548,
+  long: -121.893028
+}
+{
+  _id: ObjectId('6a241f57cc38fb3fd47362de'),
+  address: 'Downtown San Jose, CA, USA',
+  lat: 37.33548,
+  long: -121.893028
+}
+db.locations.deleteOne({_id:  ObjectId('6a241f57cc38fb3fd47362de')})
+{
+  acknowledged: true,
+  deletedCount: 1
+}
+db.locations.createIndex({
+	lat: 1,
+	long: 1
+},{ unique: true });
+lat_1_long_1
+db.locations.insertOne({
+	address: "Dev Bootcamp, San Jose, CA, USA",
+	lat: 37.335480,
+	long: -122.893028
+})
+{
+  acknowledged: true,
+  insertedId: ObjectId('6a241f98cc38fb3fd47362df')
+}
+db.locations.insertOne({
+	address: "Central San Jose, CA, USA",
+	lat: 37.335480,
+	long: -121.893028
+})
+MongoServerError: E11000 duplicate key error collection: vit.locations index: lat_1_long_1 dup key: { lat: 37.33548, long: -121.893028 }
+
+db.users.insertMany([
+   { email:  "john@test.com", name: "john"},
+   { email:  "jane@test.com", name: "jane"},
+]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6a241ed8cc38fb3fd47362d7'),
+    '1': ObjectId('6a241ed8cc38fb3fd47362d8')
+  }
+}
+db.users.createIndex({email:1},{unique:true});
+email_1
+db.users.insertOne(
+   { email:  "john@test.com", name: "johny"}
+);
+MongoServerError: E11000 duplicate key error collection: vit.users index: email_1 dup key: { email: "john@test.com" }
+db.users.drop()
+true
+db.users.insertMany([
+   { email:  "john@test.com", name: "john"},
+   { email:  "john@test.com", name: "johny"},
+   { email:  "jane@test.com", name: "jane"},
+])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6a241f0ecc38fb3fd47362da'),
+    '1': ObjectId('6a241f0ecc38fb3fd47362db'),
+    '2': ObjectId('6a241f0ecc38fb3fd47362dc')
+  }
+}
+db.users.createIndex({email: 1},{unique:true})
+MongoServerError[DuplicateKey]: Index build failed: cae06d13-ee5a-4baa-8574-0224b8525694: Collection vit.users ( 5a005c64-ba8b-444a-b02b-3f56bbe2744f ) :: caused by :: E11000 duplicate key error collection: vit.users index: email_1 dup key: { email: "john@test.com" }
+db.users.deleteOne({name:'johny', email: 'john@test.com'});
+{
+  acknowledged: true,
+  deletedCount: 1
+}
+db.users.createIndex({email: 1},{unique:true})
+email_1
+db.locations.insertOne({
+	address: "Downtown San Jose, CA, USA",
+	lat: 37.335480,
+	long: -121.893028
+})
+{
+  acknowledged: true,
+  insertedId: ObjectId('6a241f48cc38fb3fd47362dd')
+}
+db.locations.insertOne({
+	address: "Downtown San Jose, CA, USA",
+	lat: 37.335480,
+	long: -121.893028
+})
+{
+  acknowledged: true,
+  insertedId: ObjectId('6a241f57cc38fb3fd47362de')
+}
+db.locations.createIndex({
+	lat: 1,
+	long: 1
+},{ unique: true });
+MongoServerError[DuplicateKey]: Index build failed: 453bc4a3-80cc-475e-871f-863aaf6a54c0: Collection vit.locations ( b268b6f2-0509-414d-b6ec-2f0e950c3f06 ) :: caused by :: E11000 duplicate key error collection: vit.locations index: lat_1_long_1 dup key: { lat: 37.33548, long: -121.893028 }
+db.locations.find()
+{
+  _id: ObjectId('6a241f48cc38fb3fd47362dd'),
+  address: 'Downtown San Jose, CA, USA',
+  lat: 37.33548,
+  long: -121.893028
+}
+{
+  _id: ObjectId('6a241f57cc38fb3fd47362de'),
+  address: 'Downtown San Jose, CA, USA',
+  lat: 37.33548,
+  long: -121.893028
+}
+db.locations.deleteOne({_id:  ObjectId('6a241f57cc38fb3fd47362de')})
+{
+  acknowledged: true,
+  deletedCount: 1
+}
+db.locations.createIndex({
+	lat: 1,
+	long: 1
+},{ unique: true });
+lat_1_long_1
+db.locations.insertOne({
+	address: "Dev Bootcamp, San Jose, CA, USA",
+	lat: 37.335480,
+	long: -122.893028
+})
+{
+  acknowledged: true,
+  insertedId: ObjectId('6a241f98cc38fb3fd47362df')
+}
+db.locations.insertOne({
+	address: "Central San Jose, CA, USA",
+	lat: 37.335480,
+	long: -121.893028
+})
+MongoServerError: E11000 duplicate key error collection: vit.locations index: lat_1_long_1 dup key: { lat: 37.33548, long: -121.893028 }
+l
+ReferenceError: l is not defined
+db.locations.find({long: -122.893028}).explain("executionStats")
+{
+    totalDocsExamined: 2,
+    executionStages: {
+      isCached: false,
+      stage: 'COLLSCAN',
+      filter: {
+        long: {
+          '$eq': -122.893028
+        }
+      },
+      nReturned: 1,
+      executionTimeMillisEstimate: 0,
+      works: 3,
+      advanced: 1,
+      needTime: 1,
+      needYield: 0,
+      saveState: 0,
+      restoreState: 0,
+      isEOF: 1,
+      nss: 'vit.locations',
+      direction: 'forward',
+      docsExamined: 2
+    }
+  },
+  queryShapeHash: 'A09D593BB34571371A8B26982BFCF41543F374E530CE20A730256981281AC892',
+  command: {
+    find: 'locations',
+    filter: {
+      long: -122.893028
+    },
+    '$db': 'vit'
+  },
+  serverInfo: {
+    host: 'Souravjyoti',
+    port: 27017,
+    version: '8.3.2',
+    gitVersion: '89f54eb32e217d2f7bfcad50e5919f3033bb9611'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted',
+    internalQueryPlannerIgnoreIndexWithCollationForRegex: 1
+  },
+  ok: 1
+}
+db.locations.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { lat: 1, long: 1 }, name: 'lat_1_long_1', unique: true }
+]
+db.users.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { email: 1 }, name: 'email_1', unique: true }
+]
+db.users.dropIndex({ email: 1 })
+{ nIndexesWas: 2, ok: 1 }
+db.locations.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { lat: 1, long: 1 }, name: 'lat_1_long_1', unique: true }
+]
+db.locations.dropIndexes()
+{
+  nIndexesWas: 2,
+  msg: 'non-_id indexes dropped for collection',
+  ok: 1
+}
+l
