@@ -1,0 +1,235 @@
+ALTER TABLE Students
+DROP COLUMN branch;
+
+ALTER TABLE Students
+ADD (
+    country VARCHAR(30) DEFAULT 'INDIA'
+);
+
+ALTER TABLE Students
+RENAME COLUMN country TO location;
+
+
+
+ALTER TABLE Faculty
+DROP COLUMN subject;
+
+ALTER TABLE Faculty
+ADD (
+    experience INT DEFAULT 5
+);
+
+ALTER TABLE Faculty
+RENAME COLUMN experience TO years_of_experience;
+
+
+
+ALTER TABLE Marks
+DROP COLUMN subject;
+
+ALTER TABLE Marks
+ADD (
+    grade VARCHAR(5) DEFAULT 'A'
+);
+
+ALTER TABLE Marks
+RENAME COLUMN grade TO final_grade;
+
+
+
+SELECT * FROM cse;
+
+DROP TABLE cse;
+
+DESC cse;
+
+SHOW TABLES FROM vitcampus;
+
+DELETE FROM eee;
+
+SELECT * FROM eee;
+
+RENAME TABLE eee TO ECE;
+
+CREATE TABLE Worker (
+    WORKER_ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    FIRST_NAME CHAR(25),
+    LAST_NAME CHAR(25),
+    SALARY INT,
+    JOINING_DATE DATETIME,
+    DEPARTMENT CHAR(25)
+);
+
+INSERT INTO Worker
+(WORKER_ID, FIRST_NAME, LAST_NAME, SALARY, JOINING_DATE, DEPARTMENT) VALUES
+(1, 'Monika', 'Arora', 100000, '2014-02-20 09:00:00', 'HR'),
+(2, 'Niharika', 'Verma', 80000, '2014-06-11 09:00:00', 'Admin'),
+(3, 'Vishal', 'Singhal', 300000, '2014-02-20 09:00:00', 'HR'),
+(4, 'Amitabh', 'Singh', 500000, '2014-02-20 09:00:00', 'Admin'),
+(5, 'Vivek', 'Bhati', 500000, '2014-06-11 09:00:00', 'Admin'),
+(6, 'Vipul', 'Diwan', 200000, '2014-06-11 09:00:00', 'Account'),
+(7, 'Satish', 'Kumar', 75000, '2014-01-20 09:00:00', 'Account'),
+(8, 'Geetika', 'Chauhan', 90000, '2014-04-11 09:00:00', 'Admin');
+
+SELECT * FROM Worker;
+
+UPDATE Worker
+SET FIRST_NAME='Jayanth', LAST_NAME='V'
+WHERE WORKER_ID=1;
+
+UPDATE Worker
+SET SALARY = SALARY + 5000;
+
+DELETE FROM Worker
+WHERE WORKER_ID=8;
+
+
+START TRANSACTION;
+
+UPDATE Students
+SET sname = 'Abhijit'
+WHERE sid = 5;
+
+SAVEPOINT A;
+
+INSERT INTO Students
+VALUES (6, 'Chris', 'CSE');
+
+SAVEPOINT B;
+
+INSERT INTO Students
+VALUES (7, 'Bravo', 'ECE');
+
+SAVEPOINT C;
+
+SELECT * FROM Students;
+
+COMMIT;
+
+
+SET SQL_SAFE_UPDATES = 0;
+
+UPDATE Students
+SET sname = 'Abhijit'
+WHERE sid = 5;
+
+SELECT * FROM Students;
+
+
+
+START TRANSACTION;
+
+INSERT INTO Students
+VALUES (101, 'Rahul', 'CSE');
+
+SELECT * FROM Students;
+
+SAVEPOINT time15;
+
+INSERT INTO Students
+VALUES (102, 'Ankit', 'ECE');
+
+SAVEPOINT time16;
+
+SELECT * FROM Students;
+
+INSERT INTO Students
+VALUES (103, 'Priya', 'EEE');
+
+SAVEPOINT time17;
+
+ROLLBACK TO time17;
+
+INSERT INTO Students
+VALUES (104, 'Sneha', 'MECH');
+
+SAVEPOINT time18;
+
+ROLLBACK TO time17;
+
+SELECT * FROM Students;
+
+
+CREATE TABLE ECE (
+    id INT
+);
+
+CREATE TABLE ECE (
+    id INT
+);
+
+START TRANSACTION;
+
+INSERT INTO ECE VALUES (1);
+
+SAVEPOINT point_1;
+
+INSERT INTO ECE VALUES (2);
+
+SAVEPOINT point_2;
+
+INSERT INTO ECE VALUES (3);
+
+SELECT * FROM ECE;
+
+ROLLBACK TO point_2;
+
+SELECT * FROM ECE;
+
+INSERT INTO ECE VALUES (4);
+
+SAVEPOINT point_3;
+
+INSERT INTO ECE VALUES (5);
+
+SELECT * FROM ECE;
+
+ROLLBACK TO point_3;
+
+SELECT * FROM ECE;
+
+COMMIT;
+
+CREATE TABLE Worker (
+    WORKER_ID INT PRIMARY KEY,
+    FIRST_NAME CHAR(25),
+    LAST_NAME CHAR(25),
+    SALARY INT,
+    JOINING_DATE DATETIME,
+    DEPARTMENT CHAR(25)
+);
+INSERT INTO Worker VALUES
+(1, 'Monika', 'Arora', 100000, '2014-02-20 09:00:00', 'HR'),
+(2, 'Niharika', 'Verma', 80000, '2014-06-11 09:00:00', 'Admin');
+
+INSERT INTO Worker VALUES
+(3, 'Vishal', 'Singhal', 300000, '2014-02-20 09:00:00', 'HR'),
+(4, 'Amitabh', 'Singh', 500000, '2014-02-20 09:00:00', 'Admin'),
+(5, 'Vivek', 'Bhati', 500000, '2014-06-11 09:00:00', 'Admin'),
+(6, 'Vipul', 'Diwan', 200000, '2014-06-11 09:00:00', 'Account'),
+(7, 'Satish', 'Kumar', 75000, '2014-01-20 09:00:00', 'Account'),
+(8, 'Geetika', 'Chauhan', 90000, '2014-04-11 09:00:00', 'Admin'),
+(9, 'Rahul', 'Sharma', 120000, '2015-03-15 10:30:00', 'HR'),
+(10, 'Sneha', 'Iyer', 65000, '2016-07-19 11:15:00', 'Testing'),
+(11, 'Chris', 'Evans', 450000, '2017-08-25 09:45:00', 'Management'),
+(12, 'Bravo', 'Kumar', 95000, '2018-09-12 08:20:00', 'Support');
+SELECT * FROM Worker WHERE SALARY > 100000;
+
+SELECT * FROM Worker WHERE SALARY < 100000;
+
+SELECT * FROM Worker WHERE SALARY BETWEEN 80000 AND 300000;
+
+SELECT * FROM Worker WHERE DEPARTMENT IN ('HR', 'Admin');
+
+SELECT * FROM Worker WHERE FIRST_NAME LIKE 'V%';
+
+SELECT * FROM Worker WHERE DEPARTMENT != 'HR';
+
+SELECT * FROM Worker
+WHERE SALARY > 90000 AND DEPARTMENT = 'Admin';
+
+SELECT * FROM Worker
+WHERE DEPARTMENT = 'HR' OR DEPARTMENT = 'Testing';
+
+SELECT * FROM Worker
+WHERE NOT DEPARTMENT = 'Account';
