@@ -1,0 +1,94 @@
+use CollegeDB;
+DROP TABLE Worker;
+
+CREATE TABLE Worker (
+    WORKER_ID INT PRIMARY KEY,
+    FIRST_NAME CHAR(25),
+    LAST_NAME CHAR(25),
+    SALARY INT,
+    JOINING_DATE DATETIME,
+    DEPARTMENT CHAR(25)
+);
+
+INSERT INTO Worker VALUES
+(1, 'Monika', 'Arora', 100000, '2014-02-20 09:00:00', 'HR'),
+(2, 'Niharika', 'Verma', 80000, '2014-06-11 09:00:00', 'Admin'),
+(3, 'Vishal', 'Singhal', 300000, '2014-02-20 09:00:00', 'HR'),
+(4, 'Amitabh', 'Singh', 500000, '2014-02-20 09:00:00', 'Admin'),
+(5, 'Vivek', 'Bhati', 500000, '2014-06-11 09:00:00', 'Admin'),
+(6, 'Vipul', 'Diwan', 200000, '2014-06-11 09:00:00', 'Account'),
+(7, 'Satish', 'Kumar', 75000, '2014-01-20 09:00:00', 'Account'),
+(8, 'Geetika', 'Chauhan', 90000, '2014-04-11 09:00:00', 'Admin');
+
+SELECT * FROM Worker;
+
+SELECT first_name, department, salary
+FROM Worker
+WHERE department='Admin' OR salary >= 100000;
+
+SELECT worker_id, first_name, department, salary
+FROM Worker
+WHERE worker_id NOT IN (1,6,7);
+
+SELECT * FROM Worker
+WHERE salary NOT BETWEEN 110000 AND 300000;
+
+SELECT * FROM Worker
+WHERE salary BETWEEN 100000 AND 500000
+AND department NOT IN ('HR','Admin');
+
+SELECT * FROM Worker
+WHERE first_name LIKE '_i__a_';
+
+SELECT first_name, salary
+FROM Worker
+WHERE department = 'Admin'
+AND salary = (
+    SELECT MIN(salary)
+    FROM Worker
+    WHERE department = 'Admin'
+)
+AND first_name NOT LIKE '%a%'
+AND first_name NOT LIKE '%A%';
+
+
+
+SELECT salary FROM worker
+UNION ALL
+SELECT salary FROM worker;
+
+SELECT * FROM worker;
+
+SELECT worker_id AS RollNumber
+FROM worker;
+
+SELECT DISTINCT(department)
+FROM worker;
+
+SELECT worker_id, first_name,
+CASE
+    WHEN salary > 300000 THEN 'Rich people'
+    WHEN salary >= 100000 AND salary <= 299999 THEN 'Middle'
+    ELSE 'Poor'
+END AS Status
+FROM worker;
+
+SELECT MIN(salary)
+FROM worker
+WHERE department='admin';
+
+SELECT MAX(salary)
+FROM worker
+WHERE department='admin';
+
+CREATE VIEW minSalaryAdmin AS
+SELECT MIN(salary) AS MinimumSalary
+FROM worker
+WHERE department='admin';
+
+CREATE VIEW maxSalaryAdmin AS
+SELECT MAX(salary) AS MaximumSalary
+FROM worker
+WHERE department='admin';
+
+SELECT * FROM maxSalaryAdmin;
